@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('head'); -%>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .column {
+            float: left;
+            width: 33.33%;
+
+            padding: 5px;
+        }
+
+        /* Clearfix (clear floats) */
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+
+
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="/home" class="navbar-brand">OnlineMarket</a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li><a href="/home"><span class="glyphicon glyphicon-user"></span><%= firstname %></a></li>
+            <li><a href="/home/history">History</a></li>
+            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+
+        </ul>
+    </div>
+</nav>
+
+<div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+
+    <div class="alert alert-danger alert-dismissible fade in" id="alert">
+        <a href="/home" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <p style="text-align: center;" id="ptext"></p>
+    </div>
+
+    </div>
+    <div class="col-md-2"></div>
+
+</div>
+
+<div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+
+        <div class="alert alert-success alert-dismissible fade in" id="buysuccess">
+            <a href="/home" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <p style="text-align: center;" id="p1text"></p>
+        </div>
+
+    </div>
+    <div class="col-md-2"></div>
+
+</div>
+
+
+<div class="row" style="margin-left: 5px; margin-right: 5px; margin-top: 0px;">
+
+    <div class="column">
+        <img src="http://localhost:3000/images/rsz_1tablet.jpg" alt="Tablet" style="width:100%;">
+        <div style="font-weight: bold;">
+            Price: 40K BDT
+        </div>
+        <div>
+            <form action="/buy" method="post" onSubmit="if(!confirm('Are you sure to buy this?')){return false;}">
+                <input type="hidden" name="device" value="tablet">
+                <button type="submit" style="width: 200px;" class="btn btn-primary">Buy This Product</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="column" id="phone">
+        <img src="http://localhost:3000/images/rsz_1phone.jpg" alt="Phone" style="width:100%">
+        <div style="font-weight: bold;">
+            Price: 15K BDT
+        </div>
+
+        <div>
+            <form action="/buy" method="post" onSubmit="if(!confirm('Are you sure to buy this?')){return false;}">
+                <input type="hidden" name="device" value="phone">
+                <button type="submit" style="width: 200px;" class="btn btn-primary">Buy This Product</button>
+            </form>
+        </div>
+    </div>
+    <div class="column" id="pc">
+        <img src="http://localhost:3000/images/rsz_1apple-pc.png" alt="Apple Pc" style="width:100%;">
+        <div style="font-weight: bold;">
+            Price: 50K BDT
+        </div>
+        <div>
+            <form action="/buy" method="post" onSubmit="if(!confirm('Are you sure to buy this?')){return false;}">
+                <input type="hidden" name="device" value="pc">
+                <button type="submit" style="width: 200px;" class="btn btn-primary">Buy This Product</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="modalID" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="font-weight: bold;"><i>Add Bank Info</i></h4>
+            </div>
+            <div class="modal-body" style="font-style: italic;font-weight: bold;">
+
+                <form action="/api/secret" method="post">
+                    <div class="form-group">
+                        <label>AccountNo</label>
+                        <input type="text" name="accountno" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Secret</label>
+                        <input type="password" name="secret" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+    $('#alert').hide();
+    $('#buysuccess').hide();
+
+    var fg = '<%= flag %>';
+
+    if(fg == '0') {
+        $('#modalID').modal('show');
+    }
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var myParam = urlParams.get('status');
+
+
+    if(myParam == "insufficient-balance") {
+        document.getElementById('ptext').innerHTML = '<strong>Insufficient Balance!</strong>';
+        $('#alert').show();
+    } else if(myParam == "not-available") {
+        document.getElementById('ptext').innerHTML = '<strong>Product is not available!</strong>';
+        $('#alert').show();
+    } else if(myParam == "thanks-for-buying") {
+        document.getElementById('p1text').innerHTML = '<strong>Thanks for buying!</strong>';
+        $('#buysuccess').show();
+    }
+
+
+
+</script>
+
+
+</body>
+
+</html>

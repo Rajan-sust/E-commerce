@@ -1,0 +1,340 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Ecommerce Api
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /hello:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: hello_world
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: hello
+      parameters:
+        - name: name
+          in: query
+          description: The name of the person to whom to say hello
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  
+  /user/allinfo/{id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: accsec_controller
+    get:
+      description: Returns all information of the current logged in user
+      # used as the method name of the controller
+      operationId: accsec
+      parameters:
+        - name: id
+          in: path
+          description: The id of the current logged in user
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/AccountSecretResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+            
+  
+  /register:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: register_controller
+    post:
+      description: Recive data for register
+      # used as the method name of the controller
+      operationId: register
+      parameters:
+        - name: registerInfo
+          in: body
+          description: Register data in object form
+          required: true
+          schema:
+            type: object
+            properties:
+              firstname:
+                type: string
+              lastname:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/RegisterResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  
+  
+  /login:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: login_controller
+    post:
+      description: Recive data for login
+      # used as the method name of the controller
+      operationId: login
+      parameters:
+        - name: loginInfo
+          in: body
+          description: Login data in object form
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/LoginResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  /secret:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: secret_controller
+    put:
+      description: Recive data for adding secret
+      # used as the method name of the controller
+      operationId: secret
+      parameters:
+        - name: secretInfo
+          in: body
+          description: secret data in object form
+          required: true
+          schema:
+            type: object
+            properties:
+              accountno:
+                type: string
+              secret:
+                type: string
+              id:
+                type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SecretResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+          
+  /isok/accountinfo/{id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: flag_controller
+    get:
+      description: retrun '0' or '1' of the flag value
+      # used as the method name of the controller
+      operationId: flag
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of a user
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/IsOkResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  
+  /buy/records/{id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: buy_record_controller
+    get:
+      description: Returns records of buying
+      # used as the method name of the controller
+      operationId: buy_record
+      parameters:
+        - name: id
+          in: path
+          description: The id of the current logged in user
+          required: true    
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BuyRecordResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+            
+  /add/buy/record:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: buy_record_controller
+    post:
+      description: Returns success message to caller
+      # used as the method name of the controller
+      operationId: add_buy_record
+      parameters:
+        - name: buyInfo
+          in: body
+          description: Information of a single buy
+          required: true
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              price:
+                type: integer
+              
+          
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/AddRecordResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  
+            
+  
+  
+  
+  
+    
+  
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        
+  AddRecordResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        
+  AccountSecretResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        
+  
+  
+        
+    
+  RegisterResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: boolean
+  LoginResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  SecretResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  
+  IsOkResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        
+        
+  BuyRecordResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+   
+  
+      
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
